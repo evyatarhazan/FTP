@@ -11,21 +11,31 @@ def connect():
         print ("Connection unsucessful. Make sure the server is online.")
 
 
-def upld(file_name):
+def upload(file_name):
     print (f'\nUploading file: {file_name}...')
-    try:
-        with open(file_name, "rb") as content:
-            my_file = content.read(BUFFER_SIZE)
-            #x = file_name.split("/")[-1]
+    s.send(file_name.split("/")[-1].encode())
+
+    with open(file_name, "rb") as f:
+        my_file = f.read(BUFFER_SIZE)
+        while True:
+            s.send(my_file)
+            my_file  = f.read(1024)
+            if not my_file:
+                print("the file is upload")
+                break
+"""
+            #x = (file_name.split("/")[-1].encode())
             #my_file = f"{x}@{my_file}"
             print (my_file)
     except:
         print ("Couldn't open file. Make sure the file name was entered correctly.")
         return
+    ""'
     try:
-        #s.send(file_name)
+        #s.send(file_name.split("/")[-1].encode())
+        #s.send('@'.encode())
         s.send(my_file)
-        print (s.send(my_file))
+        #print (s.send(my_file))
     except:
         print ("Couldn't make server request. Make sure a connection has bene established.")
         return
@@ -34,7 +44,7 @@ def upld(file_name):
     except:
         print ("Error sending file details")
     return
-
+    """
 
 def exit():
 	s.close()
@@ -48,7 +58,7 @@ def main():
         print ('\nenter a command')
         inp = input()
         if inp == 'Send_file':
-            upld(input('Enter the file name with the path\n'))
+            upload(input('Enter the file name\n'))
         elif inp == 'exit':
             exit()
             break
