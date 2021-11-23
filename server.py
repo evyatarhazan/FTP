@@ -7,13 +7,19 @@ def main():
     soc.listen(1)
     rsoc, addr = soc.accept()
 
-    
+    file_name = rsoc.recv(1024).decode()
 
-    while True:
-        print(rsoc.recv(1024))
-        with open('file_name', "ab") as file:
-            file.write(rsoc.recv(1024))
+    with open(file_name,'ab+') as f:
+        print("the file pass")
+        
+        while True:
+            data = rsoc.recv(1024)
+            f.write(data)
+            print(data)
 
+            if not data:
+                print("it's Done")
+                break
 
 
 if __name__=="__main__":
